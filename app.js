@@ -5,29 +5,28 @@ const fs = require('fs');
 
 //
 const app = express();
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 
 //middleware functions
 app.use(express.urlencoded({extended: false})); //for post - form
 app.use(express.static('public'));  //for static pages
 
 app.get('/about', function(req,res){
-    const aboutPath = path.join(__dirname, 'views', 'about.html');
-    res.sendFile(aboutPath)
+    res.render('about');
 });
 
 app.get('/confirm', function(req,res){
-    const confirmPath = path.join(__dirname, 'views', 'confirm.html');
-    res.sendFile(confirmPath)
+    res.render('confirm');
 });
 
 app.get('/', function(req,res){
-    const indPath = path.join(__dirname, 'views', 'index.html');
-    res.sendFile(indPath)
+    res.render('index');
 });
 
 app.get('/recommend', function(req,res){
-    const recPath = path.join(__dirname, 'views', 'recommend.html');
-    res.sendFile(recPath)
+    res.render('recommend');
 });
 
 app.post('/recommend', function(req,res){
@@ -35,7 +34,7 @@ app.post('/recommend', function(req,res){
     const filePath = path.join(__dirname,'data','restaurants.json');
 
     const fileData = fs.readFileSync(filePath);
-    
+
     const storedRestaurants = JSON.parse(fileData);
     storedRestaurants.push(restaurant);
 
@@ -45,15 +44,14 @@ app.post('/recommend', function(req,res){
 });
 
 app.get('/restaurants', function(req,res){
-    const restPath = path.join(__dirname, 'views', 'restaurants.html');
-    res.sendFile(restPath)
+    //read the file
+    const filePath = path.join(__dirname,'data','restaurants.json');
+    const fileData = fs.readFileSync(filePath);
+    const storedRestaurants = JSON.parse(fileData);
+
+    res.render('restaurants', {numberOfRest: storedRestaurants.length, restaurants: storedRestaurants});
+
 });
-
-
-
-
-
-
 
 //listen method to start listening on a certain port
 app.listen(3000);
