@@ -69,6 +69,8 @@ app.get('/restaurants/:id', function(req, res){
             return res.render('restaurant-detail', {restaurant: restaurant});
         }
     } 
+
+    res.render('404');
 });
 
 //listen method to start listening on a certain port
