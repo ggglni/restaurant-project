@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const resData = require('../util/restaurant-data');
+
 router.get('/confirm', function(req,res){
     res.render('confirm');
 });
@@ -23,10 +25,36 @@ router.post('/recommend', function(req,res){
 
 router.get('/restaurants', function(req,res){
     //read the file
-    const storedRestaurants = resData.getStoredRestaurants();
-    storedRestaurants.push(restaurant);
+    let order = req.query.order;
+    let nextOrder = 'DESC';
+    
+    if (order !== 'ASC' && order !== 'DESC'){
+        order = "ASC"
+    }
 
-    res.render('restaurants', {numberOfRest: storedRestaurants.length, restaurants: storedRestaurants});
+    if (order == 'ASC'){
+        nextOrder == 'DESC';
+    }
+    else {
+        nextOrder == 'ASC';
+    }
+
+    const storedRestaurants = resData.getStoredRestaurants();
+
+    storedRestaurants.sort(function(resA, resB){ 
+        if ((order = 'ASC' && resA.name > resB.name) || (order = 'DESC' && resA.name > resB.name)) {
+            return 1
+        }
+        else {
+            return -1
+        }
+    });
+
+    res.render('restaurants', {
+        numberOfRest: storedRestaurants.length,
+        restaurants: storedRestaurants,
+        nextOrder: order
+    });
 
 });
 

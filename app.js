@@ -6,7 +6,6 @@ const uuid = require('uuid');
 const { application } = require('express');
 
 //require other files
-const resData = require('./util/restaurant-data');
 const defaultRoutes = require ('./routes/default');
 const restaurantRoutes = require ('./routes/restaurants');
 
@@ -22,8 +21,6 @@ app.use(express.static('public'));  //for static pages
 
 app.use('/', defaultRoutes); //every incoming requests starting with / will be dealt with by defaultRoutes
 app.use('/',restaurantRoutes);
-
-app.
 
 //middleware function to handle requests not handled by previous routes
 app.use(function(req,res){
